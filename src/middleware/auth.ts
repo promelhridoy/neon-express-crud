@@ -1,11 +1,15 @@
-import type { RequestHandler } from "express";
+import type { NextFunction, Request, Response } from "express";
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import config from "../config";
 import { pool } from "../db";
 
-const auth: RequestHandler = async (
-    req, res , next
+const auth = (...roles: any) => {
+return async (
+    req: Request, res: Response, next:NextFunction
 ) => {
+
+    console.log(roles);
+    
     //* 1->  Check if the token exist 
 
     // console.log(req.headers.authorization);
@@ -49,9 +53,13 @@ if(!user.rows[0].is_active){
 
 // TODO: send 
 
+req.user = decode;
+
+
 next();
     
     
+}
 }
 
 export default auth;

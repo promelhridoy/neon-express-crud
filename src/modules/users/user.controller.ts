@@ -25,6 +25,8 @@ const createUser = async (req : Request, res: Response) => {
 
 
 const getAllUser = async (req : Request, res: Response) => {
+    console.log("From controller:", req.user);
+    
     try {
         
         

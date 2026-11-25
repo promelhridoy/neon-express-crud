@@ -1,15 +1,16 @@
 import express, { type Application, type Request, type Response } from "express";
-import config from "./config";
 import { pool } from "./db";
 import { userRouter } from "./modules/users/user.route";
 import { profileRoute } from "./modules/profile/profile.route";
 import { authRouter } from "./modules/auth/auth.route";
+import logger from "./middleware/logger";
 
 const app: Application = express();
 
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
+app.use(logger)
 
 
 
