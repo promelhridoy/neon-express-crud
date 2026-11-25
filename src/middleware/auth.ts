@@ -19,7 +19,7 @@ return async (
     const token = req.headers.authorization;
 
     if(!token) {
-        res.status(401).json({
+       return res.status(401).json({
             success: false,
             massage: "Unauthorized access!!"
         })
@@ -39,7 +39,7 @@ return async (
 )
 
 if(user.rowCount === 0) {
-    res.status(404).json({
+    return res.status(404).json({
         success: false,
         message: "User not found!!"
     })
@@ -48,7 +48,7 @@ if(user.rowCount === 0) {
 //* 4-> Is the user status Active
 
 if(!user.rows[0].is_active){
-    res.status(403).json({
+   return res.status(403).json({
         success: false,
         message: "Forbidden!!"
     })
@@ -60,7 +60,7 @@ if(!user.rows[0].is_active){
 if(roles.length && !roles.includes(user.rows[0].role)) {
     return res.status(401).json({
         success: false,
-        message: "Unauthorized access!!"
+        message: "Unauthorized for access!!"
     })
 }
 
