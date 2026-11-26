@@ -7,6 +7,7 @@ import logger from "./middleware/logger";
 import globalErrorHandler from "./middleware/globalErrorHandler";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { productRoute } from "./modules/products/product.route";
 
 const app: Application = express();
 
@@ -27,6 +28,7 @@ app.use(logger)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/profile", profileRoute)
 app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/products", productRoute)
 
 
 
@@ -53,34 +55,7 @@ app.use(globalErrorHandler);
 
 
 
-app.post("/api/v1/products", async (req : Request, res: Response) => {
-    try {
-        const {name, description, price, stock, category} = req.body;
 
-        const result =await pool.query(`
-            INSERT INTO products(name, description, price, stock, category) VALUES
-            ($1, $2, $3, $4, $5) RETURNING *
-            `, [name, description, price, stock, category]
-        );
-
-            // console.log(result.rows[0]);
-            
-
-
-         res.status(201).json({
-      success: true,
-      message: "Product created successfully!!",
-      data: result.rows[0]
-      
-    });
-    } catch (error: any) {
-         res.status(500).json({
-      success: false,
-      message: error?.message,
-      error: error,
-    });
-    }
-})
 
 app.get("/api/v1/products", async (req: Request, res: Response): Promise<any> => {
     try {
