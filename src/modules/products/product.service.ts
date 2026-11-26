@@ -22,6 +22,58 @@ const createProductIntoDB = async (payload: IProduct) => {
   return result.rows[0];
 };
 
+const getAllProductFromDB = async (queryObj: Record<string, any>) => {
+  const { searchTerm, category, minPrice, maxPrice } = queryObj;
+
+  let query = `
+    SELECT 
+      p.id,
+      p.name,
+      p.description,
+      p.price,
+      p.stock,
+      p.category,
+      p.created_at,
+      p.updated_at,
+      json_build_object('id', u.id, 'name', u.name) AS user
+    FROM products p
+    JOIN users u ON p.user_id = u.id
+    WHERE 1=1
+  `;
+  const queryParams: any[] = [];
+  let paramIndex = 1;
+
+  if (searchTerm) {
+    query += ` AND p.name ILIKE $${paramIndex}`;
+    queryParams.push(`%${searchTerm}%`);
+    paramIndex++;
+  }
+
+  if (category) {
+    query += ` AND p.category ILIKE $${paramIndex}`;
+    queryParams.push(`%${category}%`);
+    paramIndex++;
+  }
+
+  if (minPrice) {
+    query += ` AND p.price >= $${paramIndex}`;
+    queryParams.push(minPrice);
+    paramIndex++;
+  }
+
+  if (maxPrice) {
+    query += ` AND p.price <= $${paramIndex}`;
+    queryParams.push(maxPrice);
+    paramIndex++;
+  }
+
+  query += ` ORDER BY p.id ASC`;
+
+  const result = await pool.query(query, queryParams);
+  return result;
+};
+
 export const productService = {
   createProductIntoDB,
+  getAllProductFromDB,
 };

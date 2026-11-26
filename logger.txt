@@ -64,3 +64,13 @@ Method : POST | URL : /api/v1/products | Time : 1795660107430
 Method : POST | URL : /api/v1/products | Time : 1795660199740
 
 Method : POST | URL : /api/v1/products | Time : 1795660342011
+
+Method : GET | URL : /api/v1/products | Time : 1795661856958
+
+Method : GET | URL : /api/v1/products?searchTerm=s | Time : 1795661923770
+
+Method : GET | URL : /api/v1/products?category=Storage | Time : 1795661944661
+
+Method : GET | URL : /api/v1/products?searchTerm=ssd&category=Storage&maxPrice=10000 | Time : 1795661963111
+
+Method : GET | URL : /api/v1/products?searchTerm=ssd&category=Storage&maxPrice=10000 | Time : 1795662030845

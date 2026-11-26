@@ -57,61 +57,6 @@ app.use(globalErrorHandler);
 
 
 
-app.get("/api/v1/products", async (req: Request, res: Response): Promise<any> => {
-    try {
-        const { searchTerm, category, minPrice, maxPrice } = req.query;
-
-        let query = `SELECT * FROM products WHERE 1=1`;
-        const queryParams: any[] = [];
-        let paramIndex = 1;
-
-        // 1. Search by product name (using ILIKE for case-insensitive search)
-        if (searchTerm) {
-            query += ` AND name ILIKE $${paramIndex}`;
-            queryParams.push(`%${searchTerm}%`);
-            paramIndex++;
-        }
-
-        // 2. Filter by category
-        if (category) {
-            query += ` AND category ILIKE $${paramIndex}`;
-            queryParams.push(`%${category}%`);
-            paramIndex++;
-        }
-
-        // 3. Filter by minimum price
-        if (minPrice) {
-            query += ` AND price >= $${paramIndex}`;
-            queryParams.push(minPrice);
-            paramIndex++;
-        }
-
-        // 4. Filter by maximum price
-        if (maxPrice) {
-            query += ` AND price <= $${paramIndex}`;
-            queryParams.push(maxPrice);
-            paramIndex++;
-        }
-
-        query += ` ORDER BY id ASC`;
-
-        const result = await pool.query(query, queryParams);
-
-        return res.status(200).json({
-            success: true,
-            message: "Products retrieved successfully!",
-            count: result.rowCount,
-            data: result.rows,
-        });
-
-    } catch (error: any) {
-        return res.status(500).json({
-            success: false,
-            message: error?.message,
-            error: error,
-        });
-    }
-});
 
 
 app.get("/api/v1/products/:id", async (req : Request, res: Response) => {
